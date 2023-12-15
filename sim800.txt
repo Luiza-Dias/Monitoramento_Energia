@@ -1,0 +1,56 @@
+AT+SAPBR=3,1,"Contype","GPRS"
+AT+SAPBR=3,1,"APN","zap.vivo.com.br"
+AT+SAPBR=3,1,"USER","vivo"
+AT+SAPBR=3,1,"PWD","vivo"
+AT+SAPBR=1,1
+
+
+AT+HTTPPARA="URL","http://industrial.api.ubidots.com/api/v1.6/devices/monitoramento-energia/?token=BBUS-OD7MqFThSC1DocgNvL4qJkoe5BD6yB"
+
+AT+HTTPPARA="CONTENT","application/json"
+
+AT+HTTPDATA= 14,70000
+
+{"corrente":0}
+
+AT+HTTPACTION=1
+
+
+
+
+while (1)
+      {
+      // Place your code here   
+      valor_ad = read_adc(1);  //Alteracao
+      Valor_tensao=valor_ad*5.00/1024; //Alteracao
+      printf("Valor da Corrente=%f V\r\n",(Valor_tensao - 2.5)/0.066);   
+      rtc_get_time(&hour,&min,&sec);   
+      rtc_get_date(&date, &month, &year);
+      printf("\r\n%d:%d:%d:%d:%d:%d\r\n",hour,min,sec,date,month,year);
+      delay_ms(1000);
+      PORTB.0=~PORTB.0;    
+      /*
+      if(rx_message)
+      {
+        rx_message=0;
+        for (i=0, j=rx_counter; i<j ; i++) 
+        {
+            message[i]=getchar();
+        }      
+        hour=(message[0]-48)*10+(message[1]-48);
+        min=(message[3]-48)*10+(message[4]-48);
+        sec=(message[6]-48)*10+(message[7]-48);  
+        
+        date=(message[10]-48)*10+(message[11]-48);  
+        month=(message[13]-48)*10+(message[14]-48);  
+        year=(message[16]-48)*10+(message[17]-48); 
+        
+        //hour=message[0];
+        //min=message[1];
+        //sec=message[2];        
+        printf("\r\nAJUSTANDO %d:%d:%d:%d:%d:%d\r\n",hour,min,sec,date,month,year);
+        rtc_set_time(hour,min,sec);  
+        rtc_set_date(date,month,year);
+      }
+      */
+      } 
